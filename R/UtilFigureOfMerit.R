@@ -90,8 +90,8 @@
 UtilFigureOfMerit <- function(dataset, FOM = "wAFROC", FPFValue = 0.2) { # dpc
   
   dataType <- dataset$dataType
-  if (dataType == "ROC" && FOM != "Wilcoxon") {
-    errMsg <- paste0("Must use Wilcoxon figure of merit with ROC data.")
+  if (dataType == "ROC" && !(FOM %in% c("Wilcoxon", "Sensitivity", "Specificity"))) {
+    errMsg <- paste0("Must use Wilcoxon/Sensitivity/Specificity figure of merit with ROC data.")
     stop(errMsg)
   }
   

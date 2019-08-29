@@ -1,7 +1,7 @@
 #' @importFrom stats approx
 
 gpfMyFOM <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, maxLL, K1, K2, FOM, FPFValue = NULL) {
-  if (!FOM %in% c("Wilcoxon", "HrAuc", "HrSe", "HrSp", "SongA1", 
+  if (!FOM %in% c("Wilcoxon", "Sensitivity", "Specificity", "HrAuc", "HrSe", "HrSp", "SongA1", 
                   "SongA2", "AFROC1", "AFROC", "wAFROC1", "wAFROC",
                   "JAFROC1", "JAFROC", "wJAFROC1", "wJAFROC", "FROC", # dpc 
                   "MaxLLF", "MaxNLF", "MaxNLFAllCases", "ExpTrnsfmSp", "ROI",
@@ -14,6 +14,8 @@ gpfMyFOM <- function(nl, ll, lesionNum, lesionID, lesionWeight, maxNL, maxLL, K1
   # fom <- wJAFROC(nl, ll, lesionNum, c(K1, K2), maxNL, maxLL, lesionWeight)
   fom <- switch(FOM,
                 "Wilcoxon" = TrapezoidalArea(nl, K1, ll, K2),
+                "Sensitivity" = Sensitivity(ll, K2, FPFValue),
+                "Specificity" = Specificity(nl, K1, FPFValue),
                 "HrAuc" = HrAuc(nl, ll, lesionNum, c(K1, K2), maxNL, maxLL),
                 "HrSe" = HrSe(nl, ll, lesionNum, c(K1, K2), maxNL, maxLL),
                 "HrSp" = HrSp(nl, ll, lesionNum, c(K1, K2), maxNL, maxLL),

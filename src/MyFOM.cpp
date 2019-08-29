@@ -38,6 +38,34 @@ double TrapezoidalArea(NumericVector noise, int n_noise, NumericVector signal, i
 }
 
 // [[Rcpp::export]]
+double Sensitivity(NumericVector tp, int tp_count, int threshold )
+{
+  double ret = 0.0;
+  int count = 0;
+  for( int k=0 ; k < tp_count; k++ ) {
+    if (tp[k]>=threshold) {
+      count++;
+    }
+  }
+  ret = double(count)/double(tp_count);  
+  return ret;
+}
+
+// [[Rcpp::export]]
+double Specificity(NumericVector tn, int tn_count, int threshold )
+{
+  double ret = 0.0;
+  int count = 0;
+  for( int k=0 ; k < tn_count; k++ ) {
+    if (tn[k]<threshold) {
+      count++;
+    }
+  }
+  ret = double(count)/double(tn_count);
+  return ret;
+}
+
+// [[Rcpp::export]]
 double HrAuc( NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll )
 {
   NumericVector tp(max_cases[ 1 ]) ;

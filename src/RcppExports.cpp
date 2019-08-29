@@ -75,6 +75,32 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// Sensitivity
+double Sensitivity(NumericVector tp, int tp_count, int threshold);
+RcppExport SEXP _RJafroc_Sensitivity(SEXP tpSEXP, SEXP tp_countSEXP, SEXP thresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type tp(tpSEXP);
+    Rcpp::traits::input_parameter< int >::type tp_count(tp_countSEXP);
+    Rcpp::traits::input_parameter< int >::type threshold(thresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(Sensitivity(tp, tp_count, threshold));
+    return rcpp_result_gen;
+END_RCPP
+}
+// Specificity
+double Specificity(NumericVector tn, int tn_count, int threshold);
+RcppExport SEXP _RJafroc_Specificity(SEXP tnSEXP, SEXP tn_countSEXP, SEXP thresholdSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type tn(tnSEXP);
+    Rcpp::traits::input_parameter< int >::type tn_count(tn_countSEXP);
+    Rcpp::traits::input_parameter< int >::type threshold(thresholdSEXP);
+    rcpp_result_gen = Rcpp::wrap(Specificity(tn, tn_count, threshold));
+    return rcpp_result_gen;
+END_RCPP
+}
 // HrAuc
 double HrAuc(NumericMatrix nl, NumericMatrix ll, NumericVector n_lesions_per_image, NumericVector max_cases, int max_nl, int max_ll);
 RcppExport SEXP _RJafroc_HrAuc(SEXP nlSEXP, SEXP llSEXP, SEXP n_lesions_per_imageSEXP, SEXP max_casesSEXP, SEXP max_nlSEXP, SEXP max_llSEXP) {
@@ -459,6 +485,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_RJafroc_Pz", (DL_FUNC) &_RJafroc_Pz, 4},
     {"_RJafroc_CBMNLLInner", (DL_FUNC) &_RJafroc_CBMNLLInner, 5},
     {"_RJafroc_TrapezoidalArea", (DL_FUNC) &_RJafroc_TrapezoidalArea, 4},
+    {"_RJafroc_Sensitivity", (DL_FUNC) &_RJafroc_Sensitivity, 3},
+    {"_RJafroc_Specificity", (DL_FUNC) &_RJafroc_Specificity, 3},
     {"_RJafroc_HrAuc", (DL_FUNC) &_RJafroc_HrAuc, 6},
     {"_RJafroc_ROI", (DL_FUNC) &_RJafroc_ROI, 6},
     {"_RJafroc_HrSe", (DL_FUNC) &_RJafroc_HrSe, 6},

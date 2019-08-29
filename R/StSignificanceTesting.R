@@ -662,7 +662,7 @@ StORHAnalysis <- function(dataset, FOM = FOM, alpha = 0.05, covEstMethod = "Jack
     NL <- dataset$NL
     LL <- dataset$LL
   } else {
-    if (FOM == "Wilcoxon"){
+    if (FOM %in% c("Wilcoxon", "Sensitivity", "Specificity")){
       dataset <- DfLroc2Roc(dataset)
       NL <- dataset$NL
       LL <- dataset$LL
@@ -1181,7 +1181,7 @@ gpfEstimateVarCov <- function(fomArray, NL, LL, lesionNum, lesionID,
     cov2 <- Cov$cov2
     cov3 <- Cov$cov3
   } else if (covEstMethod == "DeLong") {
-    if (!FOM %in% c("Wilcoxon", "HrAuc", "ROI")) 
+    if (!FOM %in% c("Wilcoxon", "Sensitivity", "Specificity", "HrAuc", "ROI")) 
       stop("DeLong\"s method can only be used for trapezoidal figures of merit.")
     
     if (FOM == "ROI") {

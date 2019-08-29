@@ -21,6 +21,14 @@ TrapezoidalArea <- function(noise, n_noise, signal, n_signal) {
     .Call('_RJafroc_TrapezoidalArea', PACKAGE = 'RJafroc', noise, n_noise, signal, n_signal)
 }
 
+Sensitivity <- function(tp, tp_count, threshold) {
+    .Call('_RJafroc_Sensitivity', PACKAGE = 'RJafroc', tp, tp_count, threshold)
+}
+
+Specificity <- function(tn, tn_count, threshold) {
+    .Call('_RJafroc_Specificity', PACKAGE = 'RJafroc', tn, tn_count, threshold)
+}
+
 HrAuc <- function(nl, ll, n_lesions_per_image, max_cases, max_nl, max_ll) {
     .Call('_RJafroc_HrAuc', PACKAGE = 'RJafroc', nl, ll, n_lesions_per_image, max_cases, max_nl, max_ll)
 }
