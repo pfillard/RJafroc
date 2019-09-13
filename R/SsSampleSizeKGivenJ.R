@@ -56,23 +56,24 @@
 #' @export
 
 SsSampleSizeKGivenJ <- function(dataset, J, alpha = 0.05, effectSize = NULL, 
-                                desiredPower = 0.8, option = "ALL", method = "DBMH", ...) {
+                                desiredPower = 0.8, FOM = "Wilcoxon", option = "ALL", method = "DBMH", FPFValue = 0.20, ...) {
   
   if (!(option %in% c("ALL", "RRRC", "FRRC", "RRFC"))) stop ("Incorrect option.")
   if (!(method %in% c("DBMH", "ORH"))) stop ("Incorrect method.")
+  if (!(FOM %in% c("Wilcoxon", "Sensitivity", "Specificity"))) stop ("Incorrect method.")
   
   extraArgs <- list(...)
   if (!missing(dataset)){
     if (dataset$dataType != "ROC") stop("Dataset must be of type ROC")
     if (method == "DBMH") {
-      ret <- StSignificanceTesting(dataset, FOM = "Wilcoxon", method = "DBMH")
+      ret <- StSignificanceTesting(dataset, FOM = FOM, method = "DBMH", FPFValue = FPFValue)
       if (is.null(effectSize)) effectSize <- ret$ciDiffTrtRRRC$Estimate
       varYTR <- ret$varComp$varComp[3]
       varYTC <- ret$varComp$varComp[4]
       varYEps <- ret$varComp$varComp[6]
       calculatedParameters <- list(varYTR = varYTR, varYTC = varYTC, varYEps = varYEps, effectSize = effectSize)
     } else if (method == "ORH") {
-      ret <- StSignificanceTesting(dataset, FOM = "Wilcoxon", method = "ORH")
+      ret <- StSignificanceTesting(dataset, FOM = FOM, method = "ORH", FPFValue = FPFValue)
       if (is.null(effectSize)) effectSize <- ret$ciDiffTrtRRRC$Estimate
       varTR <- ret$varComp$varCov[2]
       cov1 <- ret$varComp$varCov[3]
@@ -98,7 +99,7 @@ SsSampleSizeKGivenJ <- function(dataset, J, alpha = 0.05, effectSize = NULL,
       }
       K <- K + 1
       power <- do.call("SsPowerGivenJK", 
-                       c(list(J = J, K = K, option = "RRRC", method = method, alpha = alpha), calculatedParameters))
+                       c(list(J = J, K = K, FOM = FOM, option = "RRRC", method = method, alpha = alpha, FPFValue = FPFValue), calculatedParameters))
       power <- power$powerRRRC
     }
     powerRRRC <- power
@@ -113,7 +114,7 @@ SsSampleSizeKGivenJ <- function(dataset, J, alpha = 0.05, effectSize = NULL,
       }
       K <- K + 1
       power <- do.call("SsPowerGivenJK", 
-                       c(list(J = J, K = K, option = "FRRC", method = method, alpha = alpha), calculatedParameters))
+                       c(list(J = J, K = K, FOM = FOM, option = "FRRC", method = method, alpha = alpha, FPFValue = FPFValue), calculatedParameters))
       power <- power$powerFRRC
     }
     powerFRRC <- power
@@ -128,7 +129,7 @@ SsSampleSizeKGivenJ <- function(dataset, J, alpha = 0.05, effectSize = NULL,
       }
       K <- K + 1
       power <- do.call("SsPowerGivenJK", 
-                       c(list(J = J, K = K, option = "RRFC", method = method, alpha = alpha), calculatedParameters))
+                       c(list(J = J, K = K, FOM = FOM, option = "RRFC", method = method, alpha = alpha, FPFValue = FPFValue), calculatedParameters))
       power <- power$powerRRFC
     }
     powerRRFC <- power

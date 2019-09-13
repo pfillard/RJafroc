@@ -42,23 +42,24 @@
 #' @export
 #' @importFrom stats qf pf
 #' 
-SsPowerGivenJK <- function(dataset, J, K, method = "DBMH", option = "ALL", alpha = 0.05, ...) {
+SsPowerGivenJK <- function(dataset, J, K, FOM = "Wilcoxon", method = "DBMH", option = "ALL", alpha = 0.05, FPFValue = 0.20, ...) {
   
   if (!(option %in% c("ALL", "RRRC", "FRRC", "RRFC"))) stop ("Incorrect option.")
   if (!(method %in% c("DBMH", "ORH"))) stop ("Incorrect method.")
+  if (!(FOM %in% c("Wilcoxon", "Sensitivity", "Specificity"))) stop ("Incorrect method.")
   
   args <- list(...)
   if ((!missing(dataset) && (length(args) == 0))){
     if (dataset$dataType != "ROC") stop("Dataset must be of type ROC")
     if (method == "DBMH") {
-      ret <- StSignificanceTesting(dataset, FOM = "Wilcoxon", method = "DBMH")
+      ret <- StSignificanceTesting(dataset, FOM = FOM, method = "DBMH", FPFValue = FPFValue)
       effectSize <- ret$ciDiffTrtRRRC$Estimate
       varYTR <- ret$varComp$varComp[3]
       varYTC <- ret$varComp$varComp[4]
       varYEps <- ret$varComp$varComp[6]
       ret <- HelperDBMH (J, K, option, varYTR, varYTC, varYEps, effectSize, alpha)
     } else if (method == "ORH") {
-      ret <- StSignificanceTesting(dataset, FOM = "Wilcoxon", method = "ORH")
+      ret <- StSignificanceTesting(dataset, FOM = FOM, method = "ORH", FPFValue = FPFValue)
       varTR <- ret$varComp$varCov[2]
       cov1 <- ret$varComp$varCov[3]
       cov2 <- ret$varComp$varCov[4]

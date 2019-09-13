@@ -36,14 +36,15 @@
 #' @export
 
 SsPowerTable <- function(dataset, effectSize = NULL, alpha = 0.05, desiredPower = 0.8, 
-                         method = "DBMH", option = "ALL") {
+                         FOM = "Wilcoxon", method = "DBMH", option = "ALL", FPFValue = 0.20) {
   
   if (!(option %in% c("ALL", "RRRC", "FRRC", "RRFC"))) stop ("Incorrect option.")
   if (!(method %in% c("DBMH", "ORH"))) stop ("Incorrect method.")
   if (dataset$dataType != "ROC") stop("Dataset must be of type ROC")
+  if (!(FOM %in% c("Wilcoxon", "Sensitivity", "Specificity"))) stop ("Incorrect method.")
   
   if (method == "DBMH") {
-    ret <- StSignificanceTesting(dataset, FOM = "Wilcoxon", method = "DBMH")
+    ret <- StSignificanceTesting(dataset, FOM = FOM, method = "DBMH")
     if (is.null(effectSize)) effectSize <- ret$ciDiffTrtRRRC$Estimate
     varCompDBM <- ret$varComp
     varYTR <- varCompDBM$varComp[3]
@@ -55,7 +56,7 @@ SsPowerTable <- function(dataset, effectSize = NULL, alpha = 0.05, desiredPower 
                           varYEps = varYEps, 
                           effectSize = effectSize)
   } else if (method == "ORH") {
-    ret <- StSignificanceTesting(dataset, FOM = "Wilcoxon", method = "ORH")
+    ret <- StSignificanceTesting(dataset, FOM = FOM, method = "ORH", FPFValue = FPFValue)
     if (is.null(effectSize)) effectSize <- ret$ciDiffTrtRRRC$Estimate
     varTR <- ret$varComp$varCov[2]
     cov1 <- ret$varComp$varCov[3]
